@@ -17,6 +17,7 @@ const router = express.Router();
 router.post("/", requireAuth, async (req, res) => {
   try {
     const userId = req.user?.userId;
+    console.log(userId);
     if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
     const newJob = { ...req.body, userId };
@@ -38,6 +39,7 @@ router.post("/", requireAuth, async (req, res) => {
 router.get("/", requireAuth, async (req, res) => {
   try {
     const userId = req.user?.userId;
+    console.log(userId);
     if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
     const allJobs = await db.select().from(jobs).where(eq(jobs.userId, userId));
@@ -56,6 +58,7 @@ router.get("/", requireAuth, async (req, res) => {
 router.get("/:id", requireAuth, async (req, res) => {
   try {
     const userId = req.user?.userId;
+    console.log(userId);
     const jobId = req.params.id;
 
     const [job] = await db
@@ -77,6 +80,7 @@ router.get("/:id", requireAuth, async (req, res) => {
 router.put("/:id", requireAuth, async (req, res) => {
   try {
     const userId = req.user?.userId;
+    console.log(userId);
     const jobId = req.params.id;
     const updates = req.body;
 
@@ -102,6 +106,7 @@ router.put("/:id", requireAuth, async (req, res) => {
  */
 router.delete("/:id", requireAuth, async (req, res) => {
   const userId = req.user?.userId;
+  console.log(userId);
   const jobId = req.params.id;
 
   try {
@@ -180,6 +185,7 @@ router.delete("/:id", requireAuth, async (req, res) => {
 
 // router.post("/:id/start", requireAuth, async (req, res) => {
 //   const userId = req.user?.userId;
+// console.log(userId);
 //   const jobId = String(req.params.id);
 
 //   try {
@@ -239,6 +245,7 @@ router.delete("/:id", requireAuth, async (req, res) => {
 
 router.post("/new/:id/start", requireAuth, async (req, res) => {
   const userId = req.user?.userId;
+  console.log(userId);
   const jobId = String(req.params.id);
 
   try {
