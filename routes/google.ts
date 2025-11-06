@@ -21,7 +21,7 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:3000/api/authenticate/google/callback",
+      callbackURL: "https://autoclipbackend.onrender.com/api/authenticate/google/callback",
     },
     async (
       accessToken: string,
