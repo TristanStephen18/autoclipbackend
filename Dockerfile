@@ -15,7 +15,7 @@ WORKDIR /app
 
 # Install Node dependencies (skip postinstall scripts as you do)
 COPY package*.json ./
-RUN npm ci --ignore-scripts
+RUN npm ci
 
 COPY . .
 
