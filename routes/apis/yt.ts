@@ -5,7 +5,7 @@ import fs from "fs";
 import ffmpeg from "fluent-ffmpeg";
 import ffprobePath from "ffprobe-static";
 import os from "os";
-import ytdlp from 'yt-dlp-exec';
+import ytdlp from "yt-dlp-exec";
 import { uploadVideoToSupabase } from "./uploadToSupabase.ts";
 
 const router = Router();
@@ -16,7 +16,10 @@ ffmpeg.setFfprobePath(ffprobePath.path);
 const publicPath = path.join(process.cwd(), "./server/public");
 const videosPath = path.join(publicPath, "videos");
 
-const ensurePlayableMp4 = async (inputPath: string, index: number): Promise<Buffer> => {
+const ensurePlayableMp4 = async (
+  inputPath: string,
+  index: number
+): Promise<Buffer> => {
   const baseName = path.basename(inputPath, path.extname(inputPath));
   const dir = path.dirname(inputPath);
 
@@ -27,7 +30,10 @@ const ensurePlayableMp4 = async (inputPath: string, index: number): Promise<Buff
   ];
 
   const audioPath = possibleAudioFiles.find(fs.existsSync);
-  const tempPath = path.join(os.tmpdir(), `reencoded_${index}_${Date.now()}.mp4`);
+  const tempPath = path.join(
+    os.tmpdir(),
+    `reencoded_${index}_${Date.now()}.mp4`
+  );
 
   return new Promise((resolve, reject) => {
     const cmd = ffmpeg();
@@ -42,13 +48,11 @@ const ensurePlayableMp4 = async (inputPath: string, index: number): Promise<Buff
         "-movflags +faststart",
       ]);
     } else {
-      console.log(`🎬 No separate audio for ${baseName}, encoding video only...`);
+      console.log(
+        `🎬 No separate audio for ${baseName}, encoding video only...`
+      );
       cmd.input(inputPath);
-      cmd.outputOptions([
-        "-c:v libx264",
-        "-c:a aac",
-        "-movflags +faststart",
-      ]);
+      cmd.outputOptions(["-c:v libx264", "-c:a aac", "-movflags +faststart"]);
     }
 
     cmd
@@ -77,7 +81,10 @@ router.post("/download-all", async (req, res) => {
 
     for (let i = 0; i < clips.length; i++) {
       const clip = clips[i];
-      const filePath = path.join(process.cwd(), `./server/public/${clip.clipUrl}`);
+      const filePath = path.join(
+        process.cwd(),
+        `./server/public/${clip.clipUrl}`
+      );
 
       if (!fs.existsSync(filePath)) {
         console.warn(`⚠️ Missing file: ${filePath}`);
@@ -118,10 +125,12 @@ router.post("/convert", async (req, res) => {
     const finalFilename = `video_${timestamp}_final.mp4`;
     const finalFilepath = path.join(videosPath, finalFilename);
 
-    if (!fs.existsSync(videosPath)) fs.mkdirSync(videosPath, { recursive: true });
+    if (!fs.existsSync(videosPath))
+      fs.mkdirSync(videosPath, { recursive: true });
 
     console.log("📥 Downloading video stream...");
     await ytdlp(url, {
+      exec: "/opt/yt/bin/yt-dlp",
       format: "bestvideo[height<=720][ext=mp4]",
       output: videoFile,
       noWarnings: true,
@@ -130,6 +139,7 @@ router.post("/convert", async (req, res) => {
 
     console.log("📥 Downloading audio stream...");
     await ytdlp(url, {
+      exec: "/opt/yt/bin/yt-dlp",
       format: "bestaudio[ext=m4a]",
       output: audioFile,
       noWarnings: true,
@@ -168,6 +178,7 @@ router.post("/convert", async (req, res) => {
 
     // Get YouTube metadata
     const info: any = await ytdlp(url, {
+      exec: "/opt/yt/bin/yt-dlp",
       dumpSingleJson: true,
       noWarnings: true,
       youtubeSkipDashManifest: true,
