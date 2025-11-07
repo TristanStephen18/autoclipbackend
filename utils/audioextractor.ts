@@ -1,8 +1,7 @@
 import ffmpeg from "fluent-ffmpeg";
-import ffmpegPath from "ffmpeg-static";
 import ffprobePath from "ffprobe-static";
 
-ffmpeg.setFfmpegPath(ffmpegPath!);
+ffmpeg.setFfmpegPath("ffmpeg");
 ffmpeg.setFfprobePath(ffprobePath.path);
 
 export function extractToWav(inputPath: string, outputPath: string): Promise<void> {

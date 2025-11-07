@@ -3,16 +3,14 @@ import path from "path";
 import JSZip from "jszip";
 import fs from "fs";
 import ffmpeg from "fluent-ffmpeg";
-import ffmpegPath from "ffmpeg-static";
 import ffprobePath from "ffprobe-static";
 import os from "os";
 import ytdlp from 'yt-dlp-exec';
-import { uploadVideoToMega } from "../utils/uploadToMega.ts";
 import { uploadVideoToSupabase } from "./uploadToSupabase.ts";
 
 const router = Router();
 
-ffmpeg.setFfmpegPath(ffmpegPath!);
+ffmpeg.setFfmpegPath("ffmpeg");
 ffmpeg.setFfprobePath(ffprobePath.path);
 
 const publicPath = path.join(process.cwd(), "./server/public");
