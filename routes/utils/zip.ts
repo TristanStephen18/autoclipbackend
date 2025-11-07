@@ -3,13 +3,12 @@ import path from "path";
 import JSZip from "jszip";
 import fs from "fs";
 import ffmpeg from "fluent-ffmpeg";
-import ffmpegPath from "ffmpeg-static";
 import ffprobePath from "ffprobe-static";
 import os from "os";
 
 const router = Router();
 
-ffmpeg.setFfmpegPath(ffmpegPath!);
+ffmpeg.setFfmpegPath("ffmpeg");
 ffmpeg.setFfprobePath(ffprobePath.path);
 
 // Helper to re-encode video to safe H.264/AAC MP4
